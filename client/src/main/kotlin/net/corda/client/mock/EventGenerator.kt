@@ -93,8 +93,11 @@ class EventGenerator(
             1.0 to moveCashGenerator
     )
 
-    val bankOfCordaCommandGenerator = Generator.frequency(
-            0.6 to issueCashGenerator,
+    val bankOfCordaExitGenerator = Generator.frequency(
             0.4 to exitCashGenerator
+    )
+
+    val bankOfCordaIssueGenerator = Generator.frequency(
+            0.6 to issueCashGenerator
     )
 }

@@ -56,6 +56,9 @@ dependencies {
     compile project(':node')
     compile project(':finance')
 
+    // Corda Plugins: dependent flows and services used by Explorer
+    compile project(':samples:bank-of-corda-demo')
+
     // FontAwesomeFX: The "FontAwesome" icon library.
     compile 'de.jensd:fontawesomefx-fontawesome:4.6.1-2'
 

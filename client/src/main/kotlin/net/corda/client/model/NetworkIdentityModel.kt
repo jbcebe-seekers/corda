@@ -46,4 +46,6 @@ class NetworkIdentityModel {
     fun lookup(publicKey: PublicKey): ObservableValue<NodeInfo?> = parties.firstOrDefault(notaries.firstOrNullObservable { it.notaryIdentity.owningKey.keys.any { it == publicKey } }) {
         it.legalIdentity.owningKey.keys.any { it == publicKey }
     }
+
+    fun advertisedServicesOfType(serviceName: String): ObservableList<NodeInfo> = networkIdentities.filtered { it.advertisedServices.any { it.info.type.id == serviceName } }
 }
