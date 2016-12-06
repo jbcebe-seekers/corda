@@ -80,6 +80,7 @@ object IssuerFlow {
         @Suspendable
         private fun issueCashTo(amount: Amount<Currency>,
                                 issueTo: Party, issuerPartyRef: OpaqueBytes): CashFlowResult {
+            // TODO: we should pass in the Notary to be used
             val notaryNode: NodeInfo = serviceHub.networkMapCache.notaryNodes[0]
             // invoke Cash subflow to issue Asset
             progressTracker.currentStep = ISSUING

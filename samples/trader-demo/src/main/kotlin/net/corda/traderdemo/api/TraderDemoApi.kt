@@ -1,8 +1,11 @@
 package net.corda.traderdemo.api
 
-import net.corda.contracts.testing.fillWithSomeTestCash
+import net.corda.bank.api.BOC_ISSUER_PARTY
+import net.corda.bank.flow.IssuerFlow.IssuanceRequester
+import net.corda.bank.flow.IssuerFlowResult
 import net.corda.core.contracts.DOLLARS
 import net.corda.core.node.ServiceHub
+import net.corda.core.serialization.OpaqueBytes
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.utilities.Emoji
 import net.corda.core.utilities.loggerFor
@@ -30,9 +33,16 @@ class TraderDemoApi(val services: ServiceHub) {
     @Consumes(MediaType.APPLICATION_JSON)
     fun createTestCash(params: TestCashParams): Response {
         val notary = services.networkMapCache.notaryNodes.single { it.legalIdentity.name == params.notary }.notaryIdentity
-        services.fillWithSomeTestCash(params.amount.DOLLARS,
-                outputNotary = notary,
-                ownedBy = services.myInfo.legalIdentity.owningKey)
+
+        val result = services.invokeFlowAsync(IssuanceRequester::class.java, params.amount.DOLLARS,
+                                              services.myInfo.legalIdentity.name, OpaqueBytes.of(1), BOC_ISSUER_PARTY.name)
+        if (result.resultFuture.get() is IssuerFlowResult.Success) {
+            logger.info("Issue request completed successfully: ${params}")
+            return Response.status(Response.Status.CREATED).build()
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build()
+        }
+
         return Response.status(Response.Status.CREATED).build()
     }
 
