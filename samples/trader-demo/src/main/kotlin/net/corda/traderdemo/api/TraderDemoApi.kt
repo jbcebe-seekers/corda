@@ -2,7 +2,6 @@ package net.corda.traderdemo.api
 
 import net.corda.bank.api.BOC_ISSUER_PARTY
 import net.corda.bank.flow.IssuerFlow.IssuanceRequester
-import net.corda.bank.flow.IssuerFlowResult
 import net.corda.core.contracts.DOLLARS
 import net.corda.core.node.ServiceHub
 import net.corda.core.serialization.OpaqueBytes
@@ -25,25 +24,24 @@ class TraderDemoApi(val services: ServiceHub) {
     }
 
     /**
-     * Self issue some cash.
-     * TODO: At some point this demo should be extended to have a central bank node.
+     * Uses a central bank node (Bank of Corda) to request issuance of some cash.
      */
     @PUT
     @Path("create-test-cash")
     @Consumes(MediaType.APPLICATION_JSON)
     fun createTestCash(params: TestCashParams): Response {
+        // TODO: update IssuerFlow to use designated Notary
         val notary = services.networkMapCache.notaryNodes.single { it.legalIdentity.name == params.notary }.notaryIdentity
+        val bankOfCordaParty = services.networkMapCache.partyNodes.single { it.legalIdentity.name == BOC_ISSUER_PARTY.name }.legalIdentity
 
         val result = services.invokeFlowAsync(IssuanceRequester::class.java, params.amount.DOLLARS,
-                                              services.myInfo.legalIdentity.name, OpaqueBytes.of(1), BOC_ISSUER_PARTY.name)
-        if (result.resultFuture.get() is IssuerFlowResult.Success) {
+                                              services.myInfo.legalIdentity, OpaqueBytes.of(1), bankOfCordaParty)
+        if (result.resultFuture.get() is SignedTransaction) {
             logger.info("Issue request completed successfully: ${params}")
             return Response.status(Response.Status.CREATED).build()
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build()
         }
-
-        return Response.status(Response.Status.CREATED).build()
     }
 
     @POST
