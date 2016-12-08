@@ -5,10 +5,13 @@ This section describes the fundamental concepts and features that underpin the C
 
     * :doc:`key-concepts-ecosystem`
     * :doc:`key-concepts-data-model`
+    * :doc:`clauses`
+    * :doc:`merkle-trees`
     * :doc:`key-concepts-core-types`
     * :doc:`key-concepts-financial-model`
     * :doc:`key-concepts-flow-framework`
     * :doc:`key-concepts-consensus-notaries`
+    * :doc:`consensus`
     * :doc:`key-concepts-vault`
     * :doc:`key-concepts-security-model`
 

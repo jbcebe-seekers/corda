@@ -27,7 +27,7 @@ The presence of a notary signature from the state’s chosen notary indicates tr
 notarisation by invoking the ``FinalityFlow`` on the transaction once all other necessary signatures have been gathered.
 Once the finality flow returns successfully, the transaction can be considered committed to the database.
 
-Consensus is described in detail here :doc:`consensus`
+Consensus is described in detail :doc:`here </consensus>`
 
 Additionally, section 7 of the `Technical white paper`_ covers this topic in significant more depth.
 

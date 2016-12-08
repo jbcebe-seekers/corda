@@ -1,5 +1,5 @@
-Clauses key concepts
-====================
+Clauses
+=======
 
 Basic clause structure
 ----------------------
