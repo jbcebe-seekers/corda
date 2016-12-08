@@ -86,7 +86,7 @@ class NewTransaction : Fragment() {
                 dialog.contentText = when (it) {
                     is SignedTransaction -> {
                         dialog.alertType = Alert.AlertType.INFORMATION
-                        "Cash Issued \nTransaction ID : ${it.tx.id} \n"
+                        "Cash Issued \nTransaction ID : ${it.id} \nMessage"
                     }
                     is CashFlowResult.Success -> {
                         dialog.alertType = Alert.AlertType.INFORMATION
