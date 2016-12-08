@@ -165,17 +165,17 @@ fun main(args: Array<String>) {
             eventGenerator.bankOfCordaIssueGenerator.map { command ->
                 issuerRPCMint.startFlow(::IssuanceRequester,
                                  command.amount,
-                                 command.recipient.name,
+                                 command.recipient,
                                  command.issueRef,
-                                "Royal Mint")
+                                 issuerNodeMint.nodeInfo.legalIdentity)
                 Unit
             }.generate(SplittableRandom())
             eventGenerator.bankOfCordaIssueGenerator.map { command ->
                 issuerRPCFed.startFlow(::IssuanceRequester,
                         command.amount,
-                        command.recipient.name,
+                        command.recipient,
                         command.issueRef,
-                        "Federal Reserve")
+                        issuerNodeFed.nodeInfo.legalIdentity)
                 Unit
             }.generate(SplittableRandom())
         }

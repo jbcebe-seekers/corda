@@ -7,7 +7,6 @@ import javafx.collections.FXCollections
 import javafx.scene.control.*
 import javafx.stage.Window
 import net.corda.bank.flow.IssuerFlow.IssuanceRequester
-import net.corda.bank.flow.IssuerFlowResult
 import net.corda.client.fxutils.isNotNull
 import net.corda.client.fxutils.map
 import net.corda.client.fxutils.unique
@@ -16,6 +15,7 @@ import net.corda.core.contracts.*
 import net.corda.core.crypto.Party
 import net.corda.core.node.NodeInfo
 import net.corda.core.serialization.OpaqueBytes
+import net.corda.core.transactions.SignedTransaction
 import net.corda.explorer.model.CashTransaction
 import net.corda.explorer.views.bigDecimalFormatter
 import net.corda.explorer.views.byteFormatter
@@ -74,9 +74,9 @@ class NewTransaction : Fragment() {
                     myIdentity.value?.let { myIdentity ->
                         rpcProxy.value!!.startFlow(::IssuanceRequester,
                                 it.amount,
-                                it.recipient.name,
+                                it.recipient,
                                 it.issueRef,
-                                myIdentity.legalIdentity.name).returnValue.toBlocking().first()
+                                myIdentity.legalIdentity).returnValue.toBlocking().first()
                     }
                 }
                 else {
@@ -84,9 +84,9 @@ class NewTransaction : Fragment() {
                 }
             }.ui {
                 dialog.contentText = when (it) {
-                    is IssuerFlowResult.Success -> {
+                    is SignedTransaction -> {
                         dialog.alertType = Alert.AlertType.INFORMATION
-                        "Cash Issued \nTransaction ID : ${it.txnId} \nMessage : ${it.message}"
+                        "Cash Issued \nTransaction ID : ${it.tx.id} \n"
                     }
                     is CashFlowResult.Success -> {
                         dialog.alertType = Alert.AlertType.INFORMATION
